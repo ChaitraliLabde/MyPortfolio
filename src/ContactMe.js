@@ -1,57 +1,55 @@
-import React, { useState } from 'react';
+// src/components/ContactMe.js
+import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
+import axios from 'axios';
 import './ContactMe.css';
-import * as Yup from 'yup'; // Import Yup for validation
 
 const ContactMe = () => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [errors, setErrors] = useState({}); // State to hold validation errors
+  const dispatch = useDispatch();
+  const contactForm = useSelector((state) => state.contactForm);
 
-  // Define Yup schema for validation
-  const schema = Yup.object().shape({
+  const validationSchema = Yup.object({
     name: Yup.string().required('Name is required'),
     email: Yup.string().email('Invalid email address').required('Email is required'),
     message: Yup.string().required('Message is required'),
   });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      // Validate the form data against the schema
-      await schema.validate({ name, email, message }, { abortEarly: false });
-
-      // Reset form fields
-      setName('');
-      setEmail('');
-      setMessage('');
-      setErrors({}); // Clear any previous errors
-    } catch (err) {
-      // If validation fails, set the validation errors
-      const validationErrors = {};
-      err.inner.forEach((error) => {
-        validationErrors[error.path] = error.message;
-      });
-      setErrors(validationErrors);
-    }
-  };
+  const formik = useFormik({
+    initialValues: contactForm,
+    validationSchema: validationSchema,
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        await axios.post('http://localhost:5000/api/contact', values); // Ensure this URL matches your backend URL
+        dispatch({ type: 'SET_CONTACT_FORM', payload: values });
+        console.log('Form data', values);
+        resetForm();
+      } catch (error) {
+        console.error('Error submitting the form', error);
+      }
+    },
+  });
+  
 
   return (
     <section id="contact">
       <h2>Contact Me</h2>
-      <form className="contact-form" onSubmit={handleSubmit}>
+      <form className="contact-form" onSubmit={formik.handleSubmit}>
         <div className="form-group">
           <label htmlFor="name">Name:</label>
           <input
             type="text"
             id="name"
             name="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.name}
             required
           />
-          {errors.name && <p className="error-message">{errors.name}</p>}
+          {formik.touched.name && formik.errors.name ? (
+            <p className="error-message">{formik.errors.name}</p>
+          ) : null}
         </div>
         <div className="form-group">
           <label htmlFor="email">Email:</label>
@@ -59,11 +57,14 @@ const ContactMe = () => {
             type="email"
             id="email"
             name="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.email}
             required
           />
-          {errors.email && <p className="error-message">{errors.email}</p>}
+          {formik.touched.email && formik.errors.email ? (
+            <p className="error-message">{formik.errors.email}</p>
+          ) : null}
         </div>
         <div className="form-group">
           <label htmlFor="message">Message:</label>
@@ -71,11 +72,14 @@ const ContactMe = () => {
             id="message"
             name="message"
             rows="4"
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            value={formik.values.message}
             required
           ></textarea>
-          {errors.message && <p className="error-message">{errors.message}</p>}
+          {formik.touched.message && formik.errors.message ? (
+            <p className="error-message">{formik.errors.message}</p>
+          ) : null}
         </div>
         <button type="submit">Send</button>
       </form>
