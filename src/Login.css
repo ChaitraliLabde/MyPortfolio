@@ -1,0 +1,43 @@
+/* Login.css */
+.login {
+  padding: 50px 20px;
+  background-color: #FFFFFF;
+  color: #003366;
+}
+
+.login .contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.login .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.login label {
+  margin-bottom: 5px;
+  color: #003366;
+}
+
+.login input {
+  padding: 10px;
+  border: 1px solid #003366;
+  border-radius: 4px;
+  background-color: #F0F0F0;
+  color: #003366;
+}
+
+.login button {
+  padding: 10px 20px;
+  background-color: #6a0cee;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.login button:hover {
+  background-color: #003366;
+}

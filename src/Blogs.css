@@ -1,0 +1,15 @@
+/* Blog.css */
+.blog {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.blog h1 {
+  color: #003366;
+}
+
+.blog p {
+  color: #333333;
+}
