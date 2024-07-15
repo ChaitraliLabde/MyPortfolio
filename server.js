@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const blogRoutes = require('./routes/blogRoutes');
 const nodemailer = require('nodemailer');
 require('dotenv').config();
 
@@ -15,6 +16,20 @@ mongoose.connect('mongodb://localhost:27017/your_database_name', { useNewUrlPars
 
 app.use(cors());
 app.use(bodyParser.json());
+
+
+
+// Middleware setup
+app.use(express.json());
+app.use('/api', blogRoutes);
+const blogs = [
+  { _id: 1, title: 'Blog 1', content: 'Content of blog 1', author: 'Author 1' },
+  { _id: 2, title: 'Blog 2', content: 'Content of blog 2', author: 'Author 2' },
+];
+
+app.get('/api/blogs', (req, res) => {
+  res.json(blogs);
+});
 
 // Define the contact schema and model
 const contactSchema = new mongoose.Schema({
@@ -77,6 +92,7 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
+const PORT = process.env.PORT || 5000;
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
 });
