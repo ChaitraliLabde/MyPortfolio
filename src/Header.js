@@ -1,6 +1,5 @@
-// Header.js
-
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Header.css';
 
 const Header = () => {
@@ -9,10 +8,12 @@ const Header = () => {
       <h1>Chaitrali's Portfolio</h1>
       <nav>
         <ul>
-          <li><a href="#about">About Me</a></li>
-          <li><a href="#projects">Projects</a></li>
-          <li><a href="#skills">Skills</a></li>
-          <li><a href="#contact">Contact Me</a></li>
+          <li><Link to="/">About Me</Link></li>
+          <li><Link to="/projects">Projects</Link></li>
+          <li><Link to="/skills">Skills</Link></li>
+          <li><Link to="/contact">Contact Me</Link></li>
+          <li><Link to="/login">Login</Link></li>
+          <li><Link to="/blogs">Blogs</Link></li>
         </ul>
       </nav>
     </header>
@@ -20,3 +21,4 @@ const Header = () => {
 };
 
 export default Header;
+  /**/
